@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { GlobalHeroProvider } from '../../providers/global-hero/global-hero';
+import { Platform } from 'ionic-angular';
+
 declare var Plyr: any
+declare var AndroidApp:any;
+declare var cordova:any; 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -12,7 +16,7 @@ export class HomePage {
   triggerSetting = false;
   myplayer
   showPlayer = false;
-  constructor(public navCtrl: NavController, public hero: GlobalHeroProvider) {
+  constructor(public navCtrl: NavController, public hero: GlobalHeroProvider, private platform: Platform) {
   }
 
   settingClick() {
@@ -33,6 +37,9 @@ export class HomePage {
   }
 
   ionViewDidEnter() {
+    // if(this.platform.is('cordova'))
+    // cordova.plugins.Focus.focus(document.getElementById('playerContainer') as HTMLElement);
+
     this.setupPlayer();
   }
 
