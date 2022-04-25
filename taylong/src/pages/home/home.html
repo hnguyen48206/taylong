@@ -1,14 +1,11 @@
-<ion-content no-padding>
-  <!-- <button (click)="setupPlayer()">
-    showPlayer
-  </button> -->
-  <div tabindex="0" id="playerContainer" style="position:absolute; width:100%; height:100%">
-    
-    <div *ngIf="showPlayer" id="player" style="width: 100%; height: 100%;" data-plyr-provider="youtube" data-plyr-embed-id="RciE68Q7PCA"></div>
-    <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/V4kXFYRhwL0?autoplay=1" ></iframe> -->
-
-  <div (click)="settingClick()" style="background: transparent; width:100px; height:100px;
-     position: relative;
-     top: 0; left:0; z-index: 999;"></div>
+<ion-content no-padding style="position:relative;">
+  <div class="plyr__video-embed" *ngIf="showPlayer" id="player" style="width: 100%; height: 100%;">
+    <iframe [src]="getSrc()" allowfullscreen allowtransparency allow="autoplay"></iframe>
   </div>
-</ion-content> 
+  <div (click)="settingClick()" style="background: transparent; width:100px; height:100px;
+     position: absolute;
+     top: 0; left:0; z-index: 999;"></div>
+  <div *ngIf="!triggerSetting" style="background: transparent; width:100%; height:100%;
+         position: absolute;
+         top: 0; left:0; z-index: 900;"></div>
+</ion-content>

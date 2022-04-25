@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 /*
   Generated class for the GlobalHeroProvider provider.
@@ -9,6 +10,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GlobalHeroProvider {
   currentPlaylist = ''
+  settingSubject = new Subject();
+  networkStatus
   constructor() {
     console.log('Hello GlobalHeroProvider Provider');
   }

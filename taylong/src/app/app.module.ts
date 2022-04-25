@@ -7,22 +7,25 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { GlobalHeroProvider } from '../providers/global-hero/global-hero';
-import { YoutubePlayerModule } from 'ngx-youtube-player';
+import { IonicStorageModule } from '@ionic/storage';
+import { SettingPage } from '../pages/setting/setting';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    SettingPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
-    YoutubePlayerModule
+    IonicModule.forRoot(MyApp,{mode: 'ios'}),
+    IonicStorageModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    SettingPage
   ],
   providers: [
     StatusBar,

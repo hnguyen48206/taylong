@@ -5,25 +5,44 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { GlobalHeroProvider } from '../providers/global-hero/global-hero';
+import { Storage } from '@ionic/storage';
+
+declare var cordova:any
+
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage:any = HomePage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, hero: GlobalHeroProvider) {
+  constructor(storage:Storage, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, hero: GlobalHeroProvider) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
 
-      hero.currentPlaylist = localStorage.getItem('playlist');
-      if(hero.currentPlaylist == null)
+      storage.get('playlist').then((val) => {
+        if(val!=null)
+        hero.currentPlaylist = val
+        else
+        {
+          hero.currentPlaylist = 'RciE68Q7PCA';
+          storage.set('playlist', 'RciE68Q7PCA');
+        }
+      });     
+
+      if(platform.is('cordova'))
       {
-        localStorage.setItem('playlist', 'RciE68Q7PCA');
-        hero.currentPlaylist = 'RciE68Q7PCA';
+        cordova.KioskPlugin.setKioskEnabled(true)
+        cordova.KioskPlugin.setAllowedKeys([ 24, 25, 26 ]);
+        cordova.KioskPlugin.setCloseSystemDialogIntervalMillis(200)
+        cordova.KioskPlugin.setCloseSystemDialogDurationMillis(20000)
       }
+      
+      hero.networkStatus =  navigator.onLine ? "Online" : "OFFline";
+      console.log(hero.networkStatus)
+      
     });
   }
 }

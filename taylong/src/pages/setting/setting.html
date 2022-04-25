@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Trang Cài Đặt</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-card style="padding: 10px; border-radius: 15px;">
+
+    <ion-card-content>
+      <div class="setting-card-header">
+        Cài đặt chung
+      </div>
+      <div class="setting-card-content">
+        <ion-list>
+          <ion-item>
+            <ion-icon item-start name="wifi"></ion-icon>
+            Trạng thái mạng: <span [innerHTML]="this.hero.networkStatus"></span>
+          </ion-item>
+          <ion-item>
+            <button style="font-size: 2rem; padding: 20px" ion-button item-start (click)="openSystemSetting()">Mở
+              Setting hệ thống</button>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card style="padding: 10px; border-radius: 15px;">
+
+    <ion-card-content>
+      <div class="setting-card-header">
+        Điều khiển Player
+      </div>
+      <div class="setting-card-content">
+        <ion-list>
+          <ion-item>
+            <ion-icon item-start name="musical-notes"></ion-icon>
+            VideoID:<ion-input style="margin-left:10px; padding-left: 10px;
+          border: solid 1px whitesmoke;
+          border-radius: 10px;" [(ngModel)]="this.playlist"></ion-input>
+
+          </ion-item>
+          <ion-item>
+            Các Controls
+            <ion-grid>
+              <ion-row>
+                <ion-col> <button (click)="triggerEvent('play')" ion-button icon-only>
+                    <ion-icon name="play"></ion-icon>
+                  </button>
+                </ion-col>
+                <ion-col><button (click)="triggerEvent('pause')" ion-button icon-only>
+                    <ion-icon name="pause"></ion-icon>
+                  </button></ion-col>
+                <ion-col><button (click)="triggerEvent('refresh')" ion-button icon-only>
+                    <ion-icon name="refresh"></ion-icon>
+                  </button></ion-col>
+                  <ion-col><button (click)="triggerEvent('volumeUp')" ion-button icon-only>
+                    <ion-icon name="add"></ion-icon>
+                  </button></ion-col>
+                  <ion-col><button (click)="triggerEvent('volumeDown')" ion-button icon-only>
+                    <ion-icon name="remove"></ion-icon>
+                  </button></ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          
+        </ion-list>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>
+<ion-footer>
+  <ion-grid style="margin-bottom: 20px">
+    <ion-row>
+      <ion-col><button style="font-size: 2rem; width: 70%" ion-button round color="danger"
+          (click)="closeSetting()">Đóng</button></ion-col>
+      <ion-col><button style="font-size: 2rem; width: 70%" ion-button round (click)="saveSetting()">Lưu</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-footer>

@@ -24,6 +24,7 @@
     "@ionic-native/status-bar": "4.20.0",
     "@ionic/storage": "2.2.0",
     "@types/youtube": "0.0.46",
+    "cordova-open-native-settings": "1.5.5",
     "ionic-angular": "3.9.9",
     "ionicons": "3.0.0",
     "ngx-youtube-player": "^0.1.0",
@@ -33,12 +34,14 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.4",
-    "cordova-android": "^10.1.2",
+    "cordova-android": "^8.1.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
+    "cordova-plugin-kiosk-ia": "^1.1.0",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
+    "cordova-plugin-whitelist": "^1.3.5",
     "typescript": "2.6.2"
   },
   "description": "An Ionic project",
@@ -48,7 +51,10 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-kiosk-ia": {},
+      "cordova-plugin-whitelist": {},
+      "cordova-open-native-settings": {}
     },
     "platforms": [
       "android"

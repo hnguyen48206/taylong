@@ -1,0 +1,19 @@
+page-setting {
+    .setting-card-header{
+        background-color: #ffe548;
+        font-size: 2.2rem;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .setting-card-content{
+        font-size: 2.2rem !important;
+        padding: 10px;        
+    }
+    .toolbar-title-ios {
+        font-size: 2.5rem;
+    }
+    ion-col{
+        text-align: center;
+    }
+}
