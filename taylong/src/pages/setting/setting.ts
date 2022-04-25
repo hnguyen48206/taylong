@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { NavController, NavParams, Platform, ViewController } from 'ionic-angular';
 import { GlobalHeroProvider } from '../../providers/global-hero/global-hero';
+import { AlertController } from 'ionic-angular';
+
 declare var cordova: any;
 /**
  * Generated class for the SettingPage page.
@@ -16,7 +18,7 @@ declare var cordova: any;
 })
 export class SettingPage {
   playlist
-  constructor(private storage:Storage,private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
+  constructor(public alertCtrl: AlertController, private storage:Storage,private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
   }
 
   ionViewDidLoad() {
@@ -35,7 +37,7 @@ export class SettingPage {
 
   openSystemSetting() {
     if (this.platform.is('cordova'))
-      cordova.plugins.settings.open(["wifi", true], function () {
+      cordova.plugins.settings.open("wifi", function () {
         console.log('opened settings');
       },
         function () {
@@ -59,6 +61,36 @@ export class SettingPage {
       action:event,
       data:{}
     })
+  }
+
+  showPrompt() {
+    const prompt = this.alertCtrl.create({
+      title: 'Thông báo',
+      message: "Bạn có chắc muốn thoát khỏi chế độ kiosk và quay về trạng thái tablet bình thường hay không?",
+      buttons: [
+        {
+          text: 'Hủy',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Có',
+          handler: data => {
+            if(this.platform.is('cordova'))
+            {
+              cordova.KioskPlugin.setKioskEnabled(false);
+             }
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  exitKioskMode()
+  {
+
   }
 
 }
