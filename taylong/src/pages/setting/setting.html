@@ -1,10 +1,4 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>Trang Cài Đặt</ion-title>
-  </ion-navbar>
-</ion-header>
-
-<ion-content padding>
+<ion-content padding style="position:absolute">
 
   <ion-card style="padding: 10px; border-radius: 15px;">
 
@@ -19,7 +13,7 @@
             Trạng thái mạng: <span [innerHTML]="this.hero.networkStatus"></span>
           </ion-item>
           <ion-item>
-            <button style="font-size: 2rem; padding: 20px" ion-button item-start (click)="openSystemSetting()">Mở
+            <button style="padding: 20px" ion-button item-start (click)="openSystemSetting()">Mở
               Setting hệ thống</button>
           </ion-item>
         </ion-list>
@@ -72,16 +66,13 @@
     </ion-card-content>
   </ion-card>
 
-
-</ion-content>
-<ion-footer>
-  <ion-grid style="margin-bottom: 20px">
+  <ion-grid style="position:relative; bottom: 0;padding-top: 20px;">
     <ion-row>
-      <ion-col><button style="font-size: 2rem; width: 70%" ion-button round color="danger"
+      <ion-col><button style="width: 70%" ion-button round color="danger"
           (click)="closeSetting()">Đóng</button></ion-col>
-      <ion-col><button style="font-size: 2rem; width: 70%" ion-button round (click)="saveSetting()">Lưu</button>
+      <ion-col><button style="width: 70%" ion-button round (click)="saveSetting()">Lưu</button>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-</ion-footer>
+</ion-content>
