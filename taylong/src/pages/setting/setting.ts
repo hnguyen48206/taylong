@@ -35,7 +35,7 @@ export class SettingPage {
 
   openSystemSetting() {
     if (this.platform.is('cordova'))
-      cordova.plugins.settings.open("wifi", function () {
+      cordova.plugins.settings.open(["wifi", true], function () {
         console.log('opened settings');
       },
         function () {
