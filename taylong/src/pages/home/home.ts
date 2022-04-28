@@ -141,7 +141,8 @@ export class HomePage {
       else
         this.myplayer.loadVideoById(this.hero.currentPlaylist)
       this.myplayer.playVideo();
-    }.bind(this), 2000)
+      this.myplayer.setVolume(100);
+    }.bind(this), 3000)
 
   }
 
@@ -153,6 +154,7 @@ export class HomePage {
 
 
   changePlayerSrc() {
+    this.myplayer.destroy();
     this.showPlayer = false;
     setTimeout(function () {
       this.setupPlayer();
@@ -164,7 +166,6 @@ export class HomePage {
       enableBackdropDismiss: false
     });
     this.settingModal.present({
-
     });
   }
 }

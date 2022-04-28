@@ -19,8 +19,7 @@ declare var cordova: any;
 export class SettingPage {
   playlist
   currentVolume = 1.0;
-  showSlider = false
-  constructor(public alertCtrl: AlertController, private storage:Storage,private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
+  constructor(public alertCtrl: AlertController, private storage: Storage, private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
   }
 
   ionViewDidLoad() {
@@ -30,10 +29,9 @@ export class SettingPage {
   ionViewDidEnter() {
     this.hero.settingSubject.next('Đã vào setting')
     this.playlist = this.hero.currentPlaylist;
-    if(this.platform.is('cordova'))
-    this.currentVolume = cordova.VolumeControl.getVolume();
+    if (this.platform.is('cordova'))
+      this.currentVolume = cordova.VolumeControl.getVolume();
 
-    this.showSlider = true;
   }
 
   closeSetting() {
@@ -51,24 +49,21 @@ export class SettingPage {
         })
   }
 
-  saveSetting()
-  {
-    if(this.playlist!=this.hero.currentPlaylist)
-    {
+  saveSetting() {
+    if (this.playlist != this.hero.currentPlaylist) {
       console.log('Playlist changed')
       this.hero.currentPlaylist = this.playlist;
       this.storage.set('playlist', this.hero.currentPlaylist)
     }
   }
-  triggerEvent(event)
-  { 
+  triggerEvent(event) {
     console.log(event)
     let data = {}
-    if(event == 'volume')
-    data = { volume: this.currentVolume}
+    if (event == 'volume')
+      data = { volume: this.currentVolume }
     this.hero.settingSubject.next({
-      action:event,
-      data:data
+      action: event,
+      data: data
     })
   }
 
@@ -88,10 +83,9 @@ export class SettingPage {
           text: 'Có',
           role: 'cancel',
           handler: data => {
-            if(this.platform.is('cordova'))
-            {
+            if (this.platform.is('cordova')) {
               this.exitKioskMode();
-             }
+            }
           }
         }
       ]
@@ -99,9 +93,13 @@ export class SettingPage {
     prompt.present();
   }
 
-  exitKioskMode()
-  {
-    cordova.KioskPlugin.exitKiosk();
+  exitKioskMode() {
+    cordova.plugins.settings.open("settings", function () {
+      console.log('opened settings');
+    },
+      function () {
+        console.log('failed to open settings');
+      })
   }
 
 }

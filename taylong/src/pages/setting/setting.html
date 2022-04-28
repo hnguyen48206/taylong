@@ -12,11 +12,19 @@
             <ion-icon item-start name="wifi"></ion-icon>
             Trạng thái mạng: <span [innerHTML]="this.hero.networkStatus"></span>
           </ion-item>
-          <ion-item>
-            <button style="padding: 20px" ion-button item-start (click)="openSystemSetting()">Mở
-              Setting Wifi</button>
-              <button style="padding: 20px" color="danger" ion-button item-end (click)="showPrompt()">Thoát về trạng thái tablet</button>
-          </ion-item>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <button style="padding: 20px" ion-button item-start (click)="openSystemSetting()">Mở
+                  Setting Wifi</button>
+              </ion-col>
+              <ion-col>
+                <button style="padding: 20px" color="danger" ion-button item-end (click)="exitKioskMode()">Thoát về trạng thái
+                  tablet</button>
+              </ion-col>
+            </ion-row>            
+          </ion-grid>
+
         </ion-list>
       </div>
     </ion-card-content>
@@ -24,7 +32,7 @@
 
   <ion-card style="padding: 10px; border-radius: 15px;">
 
-  <ion-card-content>
+    <ion-card-content>
       <div class="setting-card-header">
         Điều khiển Player
       </div>
@@ -38,9 +46,17 @@
 
           </ion-item>
           <ion-item>
-            Các Controls         
+            Các Controls
             <ion-grid>
-                <ion-row>
+              <ion-row>
+                <ion-col>
+                  <div style="display:flex; flex-direction: row; vertical-align: middle;">
+                    <ion-icon style="padding-right: 5px;" small range-left name="volume-off"></ion-icon>
+                    <input type="range" id="vol" step=0.1 name="vol" min="0.0" max="1.0" [(ngModel)]="currentVolume"
+                      (ngModelChange)="triggerEvent('volume')">
+                    <ion-icon style="padding-left: 5px;" range-right name="volume-up"></ion-icon>
+                  </div>
+                </ion-col>
                 <ion-col> <button (click)="triggerEvent('play')" ion-button icon-only>
                     <ion-icon name="play"></ion-icon>
                   </button>
@@ -50,15 +66,9 @@
                   </button></ion-col>
                 <ion-col><button (click)="triggerEvent('refresh')" ion-button icon-only>
                     <ion-icon name="refresh"></ion-icon>
-                  </button></ion-col>                 
-                  <ion-col>
-                    <div *ngIf="showSlider" style="display:flex; flex-direction: row; vertical-align: middle;">
-                      <ion-icon style="padding-right: 5px;" small range-left name="volume-off"></ion-icon>
-                      <input type="range" id="vol" step=0.1 name="vol" min="0.0" max="1.0" [(ngModel)]="currentVolume" (ngModelChange)="triggerEvent('volume')">
-                      <ion-icon style="padding-left: 5px;" range-right name="volume-up"></ion-icon>
-                  </div>                    
-                  </ion-col>
-                  <!-- <ion-col><button (click)="triggerEvent('volumeUp')" ion-button icon-only>
+                  </button></ion-col>
+
+                <!-- <ion-col><button (click)="triggerEvent('volumeUp')" ion-button icon-only>
                     <ion-icon name="add"></ion-icon>
                   </button></ion-col>
                   <ion-col><button (click)="triggerEvent('volumeDown')" ion-button icon-only>
@@ -67,7 +77,7 @@
               </ion-row>
             </ion-grid>
           </ion-item>
-          
+
         </ion-list>
       </div>
 
@@ -76,8 +86,8 @@
 
   <ion-grid style="position:relative; bottom: 0; padding-top: 20px;">
     <ion-row>
-      <ion-col><button style="width: 70%" ion-button round color="danger"
-          (click)="closeSetting()">Đóng</button></ion-col>
+      <ion-col><button style="width: 70%" ion-button round color="danger" (click)="closeSetting()">Đóng</button>
+      </ion-col>
       <ion-col><button style="width: 70%" ion-button round (click)="saveSetting()">Lưu</button>
       </ion-col>
     </ion-row>
