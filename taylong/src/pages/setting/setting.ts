@@ -18,6 +18,8 @@ declare var cordova: any;
 })
 export class SettingPage {
   playlist
+  currentVolume = 1.0;
+  showSlider = false
   constructor(public alertCtrl: AlertController, private storage:Storage,private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
   }
 
@@ -27,7 +29,11 @@ export class SettingPage {
 
   ionViewDidEnter() {
     this.hero.settingSubject.next('Đã vào setting')
-    this.playlist = this.hero.currentPlaylist
+    this.playlist = this.hero.currentPlaylist;
+    if(this.platform.is('cordova'))
+    this.currentVolume = cordova.VolumeControl.getVolume();
+
+    this.showSlider = true;
   }
 
   closeSetting() {
@@ -57,9 +63,12 @@ export class SettingPage {
   triggerEvent(event)
   { 
     console.log(event)
+    let data = {}
+    if(event == 'volume')
+    data = { volume: this.currentVolume}
     this.hero.settingSubject.next({
       action:event,
-      data:{}
+      data:data
     })
   }
 
@@ -70,16 +79,18 @@ export class SettingPage {
       buttons: [
         {
           text: 'Hủy',
+          role: 'cancel',
           handler: data => {
             console.log('Cancel clicked');
           }
         },
         {
           text: 'Có',
+          role: 'cancel',
           handler: data => {
             if(this.platform.is('cordova'))
             {
-              cordova.KioskPlugin.setKioskEnabled(false);
+              this.exitKioskMode();
              }
           }
         }
@@ -90,7 +101,7 @@ export class SettingPage {
 
   exitKioskMode()
   {
-
+    cordova.KioskPlugin.exitKiosk();
   }
 
 }

@@ -1,7 +1,12 @@
 <ion-content no-padding style="position:relative;">
-  <div class="plyr__video-embed" *ngIf="showPlayer" id="player" style="width: 100%; height: 100%;">
+  <!-- <div class="plyr__video-embed" *ngIf="showPlayer" id="player" style="width: 100%; height: 100%;">
     <iframe [src]="getSrc()" allowfullscreen allowtransparency allow="autoplay"></iframe>
   </div>
+   -->
+
+   <div *ngIf="showPlayer" id="player" style="width: 100%; height: 100%;">
+   </div>
+
   <div (click)="settingClick()" style="background: transparent; width:100px; height:100px;
      position: absolute;
      top: 0; left:0; z-index: 999;"></div>

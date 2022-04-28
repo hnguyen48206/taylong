@@ -21,17 +21,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-
-      storage.get('playlist').then((val) => {
-        if(val!=null)
-        hero.currentPlaylist = val
-        else
-        {
-          hero.currentPlaylist = 'RciE68Q7PCA';
-          storage.set('playlist', 'RciE68Q7PCA');
-        }
-      });     
-
+  
       if(platform.is('cordova'))
       {
         cordova.KioskPlugin.setKioskEnabled(true)

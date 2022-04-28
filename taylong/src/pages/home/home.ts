@@ -5,7 +5,10 @@ import { Platform } from 'ionic-angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PopoverController } from 'ionic-angular';
 import { SettingPage } from '../setting/setting';
-declare var Plyr: any
+import { Storage } from '@ionic/storage';
+
+declare var YT: any
+
 declare var cordova: any;
 @Component({
   selector: 'page-home',
@@ -20,22 +23,27 @@ export class HomePage {
   videoSrc
   videoPrefix = 'https://www.youtube.com/embed/'
   videoSubfix = '?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1'
+  videoList = "videoseries?list="
+
   constructor(
     private popCtrl: PopoverController,
     public navCtrl: NavController,
-    private santinizer: DomSanitizer, public hero: GlobalHeroProvider, private platform: Platform) {
+    private santinizer: DomSanitizer, public hero: GlobalHeroProvider,
+    private storage: Storage,
+    private platform: Platform) {
 
     this.hero.settingSubject.subscribe(data => {
       console.log(data)
       let push = <any>data;
       switch (push.action) {
         case 'play':
+          console.log(this.myplayer)
           if (this.myplayer != null)
-            this.myplayer.play();
+            this.myplayer.playVideo();
           break;
         case 'pause':
           if (this.myplayer != null)
-            this.myplayer.pause();
+            this.myplayer.pauseVideo();
           break;
         case 'refresh':
           this.changePlayerSrc();
@@ -45,11 +53,16 @@ export class HomePage {
           break;
         case 'volumeUp':
           if (this.myplayer != null)
-          this.myplayer.increaseVolume()
+            this.myplayer.increaseVolume()
           break;
         case 'volumeDown':
           if (this.myplayer != null)
-          this.myplayer.decreaseVolume()	
+            this.myplayer.decreaseVolume()
+          break;
+        case 'volume':
+          if (this.myplayer != null && platform.is('cordova')) {
+            cordova.VolumeControl.setVolume(push.data.volume);
+          }
           break;
         default:
           break;
@@ -79,7 +92,18 @@ export class HomePage {
     // if(this.platform.is('cordova'))
     // cordova.plugins.Focus.focus(document.getElementById('playerContainer') as HTMLElement);
 
-    this.setupPlayer();
+    this.storage.get('playlist').then((val) => {
+      if (val != null)
+        this.hero.currentPlaylist = val
+      else {
+        this.hero.currentPlaylist = 'RciE68Q7PCA';
+        this.storage.set('playlist', 'RciE68Q7PCA');
+      }
+
+      this.setupPlayer();
+
+    });
+
     this.watchoutNetwork();
   }
 
@@ -95,25 +119,39 @@ export class HomePage {
     return this.santinizer.bypassSecurityTrustResourceUrl(this.videoSrc)
   }
   setupPlayer() {
-    this.videoSrc = this.videoPrefix + this.hero.currentPlaylist + this.videoSubfix
-    console.log(this.hero.currentPlaylist)
-    console.log(this.videoSrc)
-    let config = {
-      hideControls: true,
-      resetOnEnd: true,
-      loop: { active: true },
-      youtube: {
-        noCookie: false, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1
-      }
-    }
     this.showPlayer = true;
     setTimeout(function () {
-      this.myplayer = new Plyr('#player', config);
+      this.myplayer = new YT.Player('player', {
+        videoId: this.hero.currentPlaylist,
+        playerVars: {
+          'playsinline': 1,
+        },
+        events: {
+          'onStateChange': this.onPlayerStateChange
+        }
+
+      });
     }.bind(this), 1000)
+
     setTimeout(function () {
-      this.myplayer.play()
-    }.bind(this), 3000)
+      if (this.hero.currentPlaylist.length > 15) {
+        this.myplayer.loadPlaylist({ list: this.hero.currentPlaylist, index: 1 })
+        this.myplayer.setLoop(true)
+      }
+      else
+        this.myplayer.loadVideoById(this.hero.currentPlaylist)
+      this.myplayer.playVideo();
+    }.bind(this), 2000)
+
   }
+
+  onPlayerStateChange(event) {
+    let state = event.target.getPlayerState();
+    if(state == 0)
+    event.target.playVideo();
+  }
+
+
   changePlayerSrc() {
     this.showPlayer = false;
     setTimeout(function () {
