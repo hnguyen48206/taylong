@@ -18,7 +18,7 @@ declare var cordova: any;
 })
 export class SettingPage {
   playlist
-  currentVolume = 1.0;
+  currentVolume = 100;
   constructor(public alertCtrl: AlertController, private storage: Storage, private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
   }
 
