@@ -61,7 +61,7 @@ export class HomePage {
           break;
         case 'volume':
           if (this.myplayer != null && platform.is('cordova')) {
-            cordova.VolumeControl.setVolume(push.data.volume);
+            this.myplayer.setVolume(push.data.volume);
           }
           break;
         default:

@@ -94,7 +94,7 @@ export class SettingPage {
   }
 
   exitKioskMode() {
-    cordova.plugins.settings.open("settings", function () {
+    cordova.plugins.settings.open("home", function () {
       console.log('opened settings');
     },
       function () {

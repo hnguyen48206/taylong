@@ -52,7 +52,7 @@
                 <ion-col>
                   <div style="display:flex; flex-direction: row; vertical-align: middle;">
                     <ion-icon style="padding-right: 5px;" small range-left name="volume-off"></ion-icon>
-                    <input type="range" id="vol" step=0.1 name="vol" min="0.0" max="1.0" [(ngModel)]="currentVolume"
+                    <input type="range" id="vol" step=10 name="vol" min="0" max="100" [(ngModel)]="currentVolume"
                       (ngModelChange)="triggerEvent('volume')">
                     <ion-icon style="padding-left: 5px;" range-right name="volume-up"></ion-icon>
                   </div>
