@@ -101,5 +101,4 @@ export class SettingPage {
         console.log('failed to open settings');
       })
   }
-
 }

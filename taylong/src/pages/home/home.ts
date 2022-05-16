@@ -135,8 +135,9 @@ export class HomePage {
 
     setTimeout(function () {
       if (this.hero.currentPlaylist.length > 15) {
-        this.myplayer.loadPlaylist({ list: this.hero.currentPlaylist, index: 1 })
-        this.myplayer.setLoop(true)
+        this.myplayer.loadPlaylist({ list: this.hero.currentPlaylist })
+        this.myplayer.setLoop(true);
+        this.myplayer.setShuffle(true);
       }
       else
         this.myplayer.loadVideoById(this.hero.currentPlaylist)

@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { GlobalHeroProvider } from '../providers/global-hero/global-hero';
 import { IonicStorageModule } from '@ionic/storage';
 import { SettingPage } from '../pages/setting/setting';
+import { Keyboard } from '@ionic-native/keyboard';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import { SettingPage } from '../pages/setting/setting';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp,{mode: 'ios'}),
+    IonicModule.forRoot(MyApp,{
+    mode: 'ios'
+   }),
     IonicStorageModule.forRoot(),
   ],
   bootstrap: [IonicApp],
@@ -28,6 +31,7 @@ import { SettingPage } from '../pages/setting/setting';
     SettingPage
   ],
   providers: [
+    Keyboard,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
