@@ -101,4 +101,11 @@ export class SettingPage {
         console.log('failed to open settings');
       })
   }
+
+  focusFunction()
+  {
+    let container = document.getElementById('setting-main-container') as HTMLElement;
+    let videoID = document.getElementById('videoID') as HTMLElement;
+    container.scrollTop = videoID.offsetTop
+  }
 }
