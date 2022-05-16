@@ -24,7 +24,7 @@ export class MyApp {
 
       if (platform.is('cordova')) {
         cordova.KioskPlugin.setKioskEnabled(true)
-        cordova.KioskPlugin.setAllowedKeys([24, 25, 26]);
+        cordova.KioskPlugin.setAllowedKeys([]);
         cordova.KioskPlugin.setCloseSystemDialogIntervalMillis(200);
         cordova.KioskPlugin.setCloseSystemDialogDurationMillis(20000);
       }
