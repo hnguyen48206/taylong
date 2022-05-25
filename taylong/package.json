@@ -20,6 +20,8 @@
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
     "@ionic-native/core": "4.20.0",
+    "@ionic-native/file": "^4.20.0",
+    "@ionic-native/file-path": "^4.20.0",
     "@ionic-native/keyboard": "^4.20.0",
     "@ionic-native/splash-screen": "4.20.0",
     "@ionic-native/status-bar": "4.20.0",
@@ -37,6 +39,8 @@
     "@ionic/app-scripts": "3.2.4",
     "cordova-android": "^8.1.0",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-file": "^6.0.2",
+    "cordova-plugin-filepath": "^1.6.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-kiosk-ia": "^1.1.0",
@@ -59,7 +63,9 @@
       "cordova-plugin-whitelist": {},
       "cordova-open-native-settings": {},
       "cordova-sqlite-storage": {},
-      "ionic-plugin-keyboard": {}
+      "ionic-plugin-keyboard": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-filepath": {}
     },
     "platforms": [
       "android"

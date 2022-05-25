@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 */
 @Injectable()
 export class GlobalHeroProvider {
+  isLocalMode = false
   currentPlaylist = ''
   settingSubject = new Subject();
   networkStatus

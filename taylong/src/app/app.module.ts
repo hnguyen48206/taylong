@@ -10,6 +10,9 @@ import { GlobalHeroProvider } from '../providers/global-hero/global-hero';
 import { IonicStorageModule } from '@ionic/storage';
 import { SettingPage } from '../pages/setting/setting';
 import { Keyboard } from '@ionic-native/keyboard';
+import { FilePath } from '@ionic-native/file-path';
+import { File } from '@ionic-native/file';
+
 
 @NgModule({
   declarations: [
@@ -35,7 +38,9 @@ import { Keyboard } from '@ionic-native/keyboard';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    GlobalHeroProvider
+    GlobalHeroProvider,
+    FilePath,
+    File
   ]
 })
 export class AppModule {}

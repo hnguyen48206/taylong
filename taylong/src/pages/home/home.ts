@@ -6,6 +6,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { PopoverController } from 'ionic-angular';
 import { SettingPage } from '../setting/setting';
 import { Storage } from '@ionic/storage';
+import { FilePath } from '@ionic-native/file-path';
+import { File } from '@ionic-native/file';
 
 declare var YT: any
 
@@ -30,7 +32,9 @@ export class HomePage {
     public navCtrl: NavController,
     private santinizer: DomSanitizer, public hero: GlobalHeroProvider,
     private storage: Storage,
-    private platform: Platform) {
+    private platform: Platform,
+    private filePath: FilePath, private file: File
+  ) {
 
     this.hero.settingSubject.subscribe(data => {
       console.log(data)
@@ -58,6 +62,10 @@ export class HomePage {
         case 'volumeDown':
           if (this.myplayer != null)
             this.myplayer.decreaseVolume()
+          break;
+        case 'kill':
+          if (this.myplayer != null)
+            this.killPlayer()
           break;
         case 'volume':
           if (this.myplayer != null && platform.is('cordova')) {
@@ -105,8 +113,43 @@ export class HomePage {
     });
 
     this.watchoutNetwork();
+
+    if(this.platform.is('cordova'))
+    this.fileList();
   }
 
+  fileList() {
+    this.file.listDir(this.file.externalDataDirectory, '').then((result) => {
+      console.log("this.storageDirectory containnig " + this.file.externalDataDirectory);
+      console.log("listing taking place here" + this.file.externalDataDirectory);
+      console.log("showing result content" + result);
+
+      // code to print the name of files and folder on console as well as on device screen		
+
+      for (let file of result) {
+        if (file.isDirectory == true) {
+          console.log("Code if its a folder");
+          let name = file.name;
+          console.log("File name" + name);
+        }
+        else if (file.isFile == true) {
+          console.log("Code if its a file");
+          let name = file.name;
+          console.log("File name " + name);
+          let path = this.file.externalDataDirectory + name;
+          console.log(path);
+          file.getMetadata(function (metadata) {
+            let size = metadata.size;
+            console.log("File size" + size);
+          })
+        }
+      }
+
+
+      /*result will have an array of file objects with 
+      file details or if its a directory:  */
+    });
+  }
   watchoutNetwork() {
     document.addEventListener("offline", () => {
       this.hero.networkStatus = "OFFline";
@@ -149,10 +192,14 @@ export class HomePage {
 
   onPlayerStateChange(event) {
     let state = event.target.getPlayerState();
-    if(state == 0)
-    event.target.playVideo();
+    if (state == 0)
+      event.target.playVideo();
   }
 
+  killPlayer() {
+    this.myplayer.destroy();
+    this.showPlayer = false;
+  }
 
   changePlayerSrc() {
     this.myplayer.destroy();

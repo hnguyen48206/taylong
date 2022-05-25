@@ -2,8 +2,19 @@
 
   <div (click)="closeSetting()" style="position: fixed; top:0; right:0; border-radius:0 0 0 30px; padding: 20px; background-color: #f53d3d; color: whitesmoke;" ><ion-icon style="    font-size: 2em;
     font-weight: bolder;" name="close"></ion-icon></div>
- <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
-  
+  <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Chế độ OFFLINE</ion-label>
+        <ion-toggle (ionChange)="toogleChanged($event)"[(ngModel)]="hero.isLocalMode"></ion-toggle>
+      </ion-item>
+    </ion-card-content>
+     
+  </ion-card>
+ 
+ 
+ <ion-card style="padding: 10px; border-radius: 15px; width: 100%;"> 
+
   <ion-card-content>
     <div class="setting-card-header">
       Điều khiển Player
@@ -46,9 +57,10 @@
 
       </ion-list>
     </div>
-
   </ion-card-content>
 </ion-card>
+
+
   <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
       <ion-card-content>
         <div class="setting-card-header">

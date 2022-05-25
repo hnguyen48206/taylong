@@ -23,6 +23,19 @@ export class SettingPage {
   constructor(private toast:ToastController, public alertCtrl: AlertController, private storage: Storage, private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
   }
 
+  toogleChanged(e)
+  {
+    console.log(this.hero.isLocalMode)
+    if(this.hero.isLocalMode)
+    {
+      this.triggerEvent('kill');
+    }
+    else
+    {
+      this.triggerEvent('refresh');
+    }
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingPage');
   }
