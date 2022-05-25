@@ -1,5 +1,55 @@
-<ion-content id="setting-main-container" padding style="position:absolute; overflow: scroll;">
-    <ion-card style="padding: 10px; border-radius: 15px;">
+<ion-content id="setting-main-container" style="position:absolute; overflow: scroll;">
+
+  <div (click)="closeSetting()" style="position: fixed; top:0; right:0; border-radius:0 0 0 30px; padding: 20px; background-color: #f53d3d; color: whitesmoke;" ><ion-icon style="    font-size: 2em;
+    font-weight: bolder;" name="close"></ion-icon></div>
+ <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
+  
+  <ion-card-content>
+    <div class="setting-card-header">
+      Điều khiển Player
+    </div>
+    <div class="setting-card-content">
+      <ion-list>
+        <ion-item id="videoID">                          
+        <ion-icon item-start name="musical-notes"></ion-icon>
+        <input (focus)="focusFunction()" (focusout)="outFocusFunction()" style="width:90%; margin-left:10px; padding-left: 5px; padding-right: 5px;
+        border: solid 1px whitesmoke; border-radius: 10px;" [(ngModel)]="this.playlist">
+          <button color="secondary" (click)="saveSetting()" ion-button icon-only item-end>
+            <ion-icon name="md-checkbox-outline"></ion-icon>
+          </button>
+        </ion-item>
+        <ion-item>
+          Các Controls
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <div style="display:flex; flex-direction: row; vertical-align: middle;">
+                  <ion-icon style="padding-right: 5px;" small range-left name="volume-off"></ion-icon>
+                  <input type="range" id="vol" step=10 name="vol" min="0" max="100" [(ngModel)]="currentVolume"
+                    (ngModelChange)="triggerEvent('volume')">
+                  <ion-icon style="padding-left: 5px;" range-right name="volume-up"></ion-icon>
+                </div>
+              </ion-col>
+              <ion-col> <button (click)="triggerEvent('play')" ion-button icon-only>
+                  <ion-icon name="play"></ion-icon>
+                </button>
+              </ion-col>
+              <ion-col><button (click)="triggerEvent('pause')" ion-button icon-only>
+                  <ion-icon name="pause"></ion-icon>
+                </button></ion-col>
+              <ion-col><button (click)="triggerEvent('refresh')" ion-button icon-only>
+                  <ion-icon name="refresh"></ion-icon>
+                </button></ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+
+      </ion-list>
+    </div>
+
+  </ion-card-content>
+</ion-card>
+  <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
       <ion-card-content>
         <div class="setting-card-header">
           Cài đặt chung
@@ -28,68 +78,5 @@
       </ion-card-content>
     </ion-card>
   
-    <ion-card style="padding: 10px; border-radius: 15px;">
-  
-      <ion-card-content>
-        <div class="setting-card-header">
-          Điều khiển Player
-        </div>
-        <div class="setting-card-content">
-          <ion-list>
-            <ion-item id="videoID">
-                          
-              <ion-icon item-start name="musical-notes"></ion-icon>
-              VideoID:<input (focus)="focusFunction()" style="margin-left:10px; padding-left: 10px;
-            border: solid 1px whitesmoke; width: 80%; min-width: 50%;
-            border-radius: 10px;" [(ngModel)]="this.playlist">
    
-            </ion-item>
-            <ion-item>
-              Các Controls
-              <ion-grid>
-                <ion-row>
-                  <ion-col>
-                    <div style="display:flex; flex-direction: row; vertical-align: middle;">
-                      <ion-icon style="padding-right: 5px;" small range-left name="volume-off"></ion-icon>
-                      <input type="range" id="vol" step=10 name="vol" min="0" max="100" [(ngModel)]="currentVolume"
-                        (ngModelChange)="triggerEvent('volume')">
-                      <ion-icon style="padding-left: 5px;" range-right name="volume-up"></ion-icon>
-                    </div>
-                  </ion-col>
-                  <ion-col> <button (click)="triggerEvent('play')" ion-button icon-only>
-                      <ion-icon name="play"></ion-icon>
-                    </button>
-                  </ion-col>
-                  <ion-col><button (click)="triggerEvent('pause')" ion-button icon-only>
-                      <ion-icon name="pause"></ion-icon>
-                    </button></ion-col>
-                  <ion-col><button (click)="triggerEvent('refresh')" ion-button icon-only>
-                      <ion-icon name="refresh"></ion-icon>
-                    </button></ion-col>
-  
-                  <!-- <ion-col><button (click)="triggerEvent('volumeUp')" ion-button icon-only>
-                      <ion-icon name="add"></ion-icon>
-                    </button></ion-col>
-                    <ion-col><button (click)="triggerEvent('volumeDown')" ion-button icon-only>
-                      <ion-icon name="remove"></ion-icon>
-                    </button></ion-col> -->
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-  
-          </ion-list>
-        </div>
-  
-      </ion-card-content>
-    </ion-card>
-  
-    <ion-grid style="position:relative; bottom: 0; padding-top: 20px;">
-      <ion-row>
-        <ion-col><button style="width: 70%" ion-button round color="danger" (click)="closeSetting()">Đóng</button>
-        </ion-col>
-        <ion-col><button style="width: 70%" ion-button round (click)="saveSetting()">Lưu</button>
-        </ion-col>
-      </ion-row>
-    </ion-grid> 
-  
 </ion-content>

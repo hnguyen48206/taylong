@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage';
 import { NavController, NavParams, Platform, ViewController } from 'ionic-angular';
 import { GlobalHeroProvider } from '../../providers/global-hero/global-hero';
 import { AlertController } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 
 declare var cordova: any;
 /**
@@ -19,7 +20,7 @@ declare var cordova: any;
 export class SettingPage {
   playlist
   currentVolume = 100;
-  constructor(public alertCtrl: AlertController, private storage: Storage, private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
+  constructor(private toast:ToastController, public alertCtrl: AlertController, private storage: Storage, private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
   }
 
   ionViewDidLoad() {
@@ -55,6 +56,8 @@ export class SettingPage {
       this.hero.currentPlaylist = this.playlist;
       this.storage.set('playlist', this.hero.currentPlaylist)
     }
+
+    this.presentToast('Đã lưu playlist mới.')
   }
   triggerEvent(event) {
     console.log(event)
@@ -104,8 +107,27 @@ export class SettingPage {
 
   focusFunction()
   {
-    let container = document.getElementById('setting-main-container') as HTMLElement;
-    let videoID = document.getElementById('videoID') as HTMLElement;
-    container.scrollTop = videoID.offsetTop
+    console.log('focus input')
+      let container = document.getElementById('setting-main-container') as HTMLElement;
+      let videoID = document.getElementById('videoID') as HTMLElement;
+      container.scrollTop = videoID.offsetTop
+  }
+
+  outFocusFunction(){
+    console.log('focus output')
+  }
+
+  presentToast(msg) {
+    let inform = this.toast.create({
+      message: msg,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    inform.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    inform.present();
   }
 }
