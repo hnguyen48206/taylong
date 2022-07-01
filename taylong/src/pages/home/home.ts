@@ -280,6 +280,8 @@ export class HomePage {
       this.currentPlayingLocalFileIndex++;
       this.currentLocalPlayerLink = this.hero.listOfLocalFiles[this.currentPlayingLocalFileIndex]
     }
+    console.log(this.localVideoPlayer)
+    this.localVideoPlayer.play();
   }
   shuffleLocalPlaylistByIndex(index)
   {
