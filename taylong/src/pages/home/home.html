@@ -4,15 +4,19 @@
       <div *ngIf="showPlayer" id="player" style="width: 100%; height: 100%;">
       </div>
    </div>
-   
+
 
    <div *ngIf="hero.isLocalMode" id="localPlayer" style="width: 100%; height: 100%;">
+      <video (ended)="localVideoEnded()" id="localPlayer" *ngIf="hero.listOfLocalFiles.length>0" width="100%" height="100%" autoplay>
+         <source [src]="currentLocalPlayerLink" type="video/mp4">
+         Your browser does not support the video tag.
+      </video>
    </div>
-   
-  <div (click)="settingClick()" style="background: transparent; width:100px; height:100px;
+
+   <div (click)="settingClick()" style="background: transparent; width:100px; height:100px;
      position: absolute;
      top: 0; left:0; z-index: 999;"></div>
-  <div *ngIf="!triggerSetting" style="background: transparent; width:100%; height:100%;
+   <div *ngIf="!triggerSetting" style="background: transparent; width:100%; height:100%;
          position: absolute;
          top: 0; left:0; z-index: 900;"></div>
 </ion-content>

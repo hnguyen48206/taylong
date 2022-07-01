@@ -9,10 +9,13 @@ import { Subject } from 'rxjs';
 */
 @Injectable()
 export class GlobalHeroProvider {
-  isLocalMode = false
+  isLocalMode = true
   currentPlaylist = ''
   settingSubject = new Subject();
   networkStatus
+
+  listOfLocalFiles = []
+  listOfLocalFileNames = []
   constructor() {
     console.log('Hello GlobalHeroProvider Provider');
   }

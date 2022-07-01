@@ -20,18 +20,16 @@ declare var cordova: any;
 export class SettingPage {
   playlist
   currentVolume = 100;
-  constructor(private toast:ToastController, public alertCtrl: AlertController, private storage: Storage, private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
+  constructor(private toast: ToastController, public alertCtrl: AlertController, private storage: Storage, private platform: Platform, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public hero: GlobalHeroProvider) {
   }
 
-  toogleChanged(e)
-  {
+  toogleChanged(e) {
     console.log(this.hero.isLocalMode)
-    if(this.hero.isLocalMode)
-    {
+    if (this.hero.isLocalMode) {
       this.triggerEvent('kill');
+      this.triggerEvent('localModeSwitch');
     }
-    else
-    {
+    else {
       this.triggerEvent('refresh');
     }
   }
@@ -69,14 +67,22 @@ export class SettingPage {
       this.hero.currentPlaylist = this.playlist;
       this.storage.set('playlist', this.hero.currentPlaylist)
     }
-
     this.presentToast('Đã lưu playlist mới.')
   }
+
   triggerEvent(event) {
     console.log(event)
     let data = {}
     if (event == 'volume')
       data = { volume: this.currentVolume }
+    if (event == 'local_volume')
+      data = { volume: this.currentVolume }
+    if (event.startsWith('local_startwith_')) {
+      let parts = event.split('_')
+      let index = parts[parts.length - 1]
+      data = { index: index }
+      event = 'local_startwith_index'
+    }
     this.hero.settingSubject.next({
       action: event,
       data: data
@@ -118,15 +124,14 @@ export class SettingPage {
       })
   }
 
-  focusFunction()
-  {
+  focusFunction() {
     console.log('focus input')
-      let container = document.getElementById('setting-main-container') as HTMLElement;
-      let videoID = document.getElementById('videoID') as HTMLElement;
-      container.scrollTop = videoID.offsetTop
+    let container = document.getElementById('setting-main-container') as HTMLElement;
+    let videoID = document.getElementById('videoID') as HTMLElement;
+    container.scrollTop = videoID.offsetTop
   }
 
-  outFocusFunction(){
+  outFocusFunction() {
     console.log('focus output')
   }
 
@@ -136,11 +141,17 @@ export class SettingPage {
       duration: 3000,
       position: 'bottom'
     });
-  
+
     inform.onDidDismiss(() => {
       console.log('Dismissed toast');
     });
-  
+
     inform.present();
+  }
+
+
+  localVideoSelected(index) {
+    console.log(index)
+    this.triggerEvent('local_startwith_' + index);
   }
 }

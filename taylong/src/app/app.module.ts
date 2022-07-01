@@ -12,6 +12,7 @@ import { SettingPage } from '../pages/setting/setting';
 import { Keyboard } from '@ionic-native/keyboard';
 import { FilePath } from '@ionic-native/file-path';
 import { File } from '@ionic-native/file';
+import { AccordionModule } from 'ngx-accordion';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { File } from '@ionic-native/file';
     mode: 'ios'
    }),
     IonicStorageModule.forRoot(),
+    AccordionModule 
   ],
   bootstrap: [IonicApp],
   entryComponents: [

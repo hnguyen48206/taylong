@@ -1,34 +1,82 @@
 <ion-content id="setting-main-container" style="position:absolute; overflow: scroll;">
 
-  <div (click)="closeSetting()" style="position: fixed; top:0; right:0; border-radius:0 0 0 30px; padding: 20px; background-color: #f53d3d; color: whitesmoke;" ><ion-icon style="    font-size: 2em;
-    font-weight: bolder;" name="close"></ion-icon></div>
+  <div (click)="closeSetting()"
+    style="position: fixed; top:0; right:0; border-radius:0 0 0 30px; padding: 20px; background-color: #f53d3d; color: whitesmoke;">
+    <ion-icon style="    font-size: 2em;
+    font-weight: bolder;" name="close"></ion-icon>
+  </div>
   <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
     <ion-card-content>
       <ion-item>
         <ion-label>Chế độ OFFLINE</ion-label>
-        <ion-toggle (ionChange)="toogleChanged($event)"[(ngModel)]="hero.isLocalMode"></ion-toggle>
+        <ion-toggle (ionChange)="toogleChanged($event)" [(ngModel)]="hero.isLocalMode"></ion-toggle>
       </ion-item>
     </ion-card-content>
-     
-  </ion-card>
- 
- 
- <ion-card style="padding: 10px; border-radius: 15px; width: 100%;"> 
 
-  <ion-card-content>
-    <div class="setting-card-header">
-      Điều khiển Player
-    </div>
-    <div class="setting-card-content">
-      <ion-list>
-        <ion-item id="videoID">                          
-        <ion-icon item-start name="musical-notes"></ion-icon>
-        <input (focus)="focusFunction()" (focusout)="outFocusFunction()" style="width:90%; margin-left:10px; padding-left: 5px; padding-right: 5px;
+  </ion-card>
+
+
+  <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
+
+    <ion-card-content *ngIf="!hero.isLocalMode">
+      <div class="setting-card-header">
+        Điều khiển Player
+      </div>
+      <div class="setting-card-content">
+        <ion-list>
+          <ion-item id="videoID">
+            <ion-icon item-start name="musical-notes"></ion-icon>
+            <input (focus)="focusFunction()" (focusout)="outFocusFunction()" style="width:90%; margin-left:10px; padding-left: 5px; padding-right: 5px;
         border: solid 1px whitesmoke; border-radius: 10px;" [(ngModel)]="this.playlist">
-          <button color="secondary" (click)="saveSetting()" ion-button icon-only item-end>
-            <ion-icon name="md-checkbox-outline"></ion-icon>
-          </button>
-        </ion-item>
+            <button color="secondary" (click)="saveSetting()" ion-button icon-only item-end>
+              <ion-icon name="md-checkbox-outline"></ion-icon>
+            </button>
+          </ion-item>
+          <ion-item>
+            Các Controls
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <div style="display:flex; flex-direction: row; vertical-align: middle;">
+                    <ion-icon style="padding-right: 5px;" small range-left name="volume-off"></ion-icon>
+                    <input type="range" id="vol" step=10 name="vol" min="0" max="100" [(ngModel)]="currentVolume"
+                      (ngModelChange)="triggerEvent('volume')">
+                    <ion-icon style="padding-left: 5px;" range-right name="volume-up"></ion-icon>
+                  </div>
+                </ion-col>
+                <ion-col> <button (click)="triggerEvent('play')" ion-button icon-only>
+                    <ion-icon name="play"></ion-icon>
+                  </button>
+                </ion-col>
+                <ion-col><button (click)="triggerEvent('pause')" ion-button icon-only>
+                    <ion-icon name="pause"></ion-icon>
+                  </button></ion-col>
+                <ion-col><button (click)="triggerEvent('refresh')" ion-button icon-only>
+                    <ion-icon name="refresh"></ion-icon>
+                  </button></ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+        </ion-list>
+      </div>
+    </ion-card-content>
+
+    <ion-card-content *ngIf="hero.isLocalMode">
+      <div class="setting-card-header">
+        Điều khiển Player
+      </div>
+      <div class="setting-card-content">
+        <accordion [showArrows]="true" [closeOthers]="false" [expandAll]="false">
+          <accordion-group heading="Danh sách videos trong bộ nhớ thiết bị">
+            <ion-list>
+              <button ion-item *ngFor="let video of hero.listOfLocalFileNames; index as i"
+                (click)="localVideoSelected(i)">
+                {{video}}
+              </button>
+            </ion-list>
+          </accordion-group>
+        </accordion>
         <ion-item>
           Các Controls
           <ion-grid>
@@ -37,58 +85,57 @@
                 <div style="display:flex; flex-direction: row; vertical-align: middle;">
                   <ion-icon style="padding-right: 5px;" small range-left name="volume-off"></ion-icon>
                   <input type="range" id="vol" step=10 name="vol" min="0" max="100" [(ngModel)]="currentVolume"
-                    (ngModelChange)="triggerEvent('volume')">
+                    (ngModelChange)="triggerEvent('local_volume')">
                   <ion-icon style="padding-left: 5px;" range-right name="volume-up"></ion-icon>
                 </div>
               </ion-col>
-              <ion-col> <button (click)="triggerEvent('play')" ion-button icon-only>
+              <ion-col> <button (click)="triggerEvent('local_play')" ion-button icon-only>
                   <ion-icon name="play"></ion-icon>
                 </button>
               </ion-col>
-              <ion-col><button (click)="triggerEvent('pause')" ion-button icon-only>
+              <ion-col><button (click)="triggerEvent('local_pause')" ion-button icon-only>
                   <ion-icon name="pause"></ion-icon>
                 </button></ion-col>
-              <ion-col><button (click)="triggerEvent('refresh')" ion-button icon-only>
+              <ion-col><button (click)="triggerEvent('local_shuffle')" ion-button icon-only>
                   <ion-icon name="refresh"></ion-icon>
                 </button></ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
-
-      </ion-list>
-    </div>
-  </ion-card-content>
-</ion-card>
+      </div>
+    </ion-card-content>
+  </ion-card>
 
 
   <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
-      <ion-card-content>
-        <div class="setting-card-header">
-          Cài đặt chung
-        </div>
-        <div class="setting-card-content">
-          <ion-list>
-            <ion-item>
-              <ion-icon item-start name="wifi"></ion-icon>
-              Trạng thái mạng: <span [innerHTML]="this.hero.networkStatus"></span>
-            </ion-item>
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <button style="padding: 20px" ion-button item-start (click)="openSystemSetting()">Mở
-                    Setting Wifi</button>
-                </ion-col>
-                <ion-col>
-                  <button style="padding: 20px" color="danger" ion-button item-end (click)="exitKioskMode()">Thoát về trạng thái
-                    tablet</button>
-                </ion-col>
-              </ion-row>            
-            </ion-grid>
-  
-          </ion-list>
-        </div>
-      </ion-card-content>
-    </ion-card>
-  
-   
+    <ion-card-content>
+      <div class="setting-card-header">
+        Cài đặt chung
+      </div>
+      <div class="setting-card-content">
+        <ion-list>
+          <ion-item>
+            <ion-icon item-start name="wifi"></ion-icon>
+            Trạng thái mạng: <span [innerHTML]="this.hero.networkStatus"></span>
+          </ion-item>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <button style="padding: 20px" ion-button item-start (click)="openSystemSetting()">Mở
+                  Setting Wifi</button>
+              </ion-col>
+              <ion-col>
+                <button style="padding: 20px" color="danger" ion-button item-end (click)="exitKioskMode()">Thoát về
+                  trạng thái
+                  tablet</button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+        </ion-list>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+
 </ion-content>

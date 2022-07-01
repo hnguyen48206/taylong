@@ -12,6 +12,7 @@ import { File } from '@ionic-native/file';
 declare var YT: any
 
 declare var cordova: any;
+declare var window: any;
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -27,6 +28,12 @@ export class HomePage {
   videoSubfix = '?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1'
   videoList = "videoseries?list="
 
+
+  ///////////////////////Local Files
+  currentPlayingLocalFileIndex = 0
+  currentLocalPlayerLink = ""
+  localVideoPlayer
+
   constructor(
     private popCtrl: PopoverController,
     public navCtrl: NavController,
@@ -35,6 +42,7 @@ export class HomePage {
     private platform: Platform,
     private filePath: FilePath, private file: File
   ) {
+
 
     this.hero.settingSubject.subscribe(data => {
       console.log(data)
@@ -71,7 +79,25 @@ export class HomePage {
           if (this.myplayer != null && platform.is('cordova')) {
             this.myplayer.setVolume(push.data.volume);
           }
+        case 'localModeSwitch':
+          setTimeout(() => {
+            if (this.hero.isLocalMode)
+              this.localVideoPlayer = document.getElementById('localPlayer') as HTMLVideoElement;
+          }, 1000);
           break;
+        case 'local_play':
+          if (this.localVideoPlayer != null)
+            this.localVideoPlayer.play()
+          break;
+        case 'local_pause':
+          if (this.localVideoPlayer != null)
+            this.localVideoPlayer.pause()
+          break;
+        case 'local_shuffle':
+          this.shuffleLocalPlaylist()
+          break;
+        case 'local_startwith_index':
+          this.shuffleLocalPlaylistByIndex(push.data.index)
         default:
           break;
       }
@@ -100,6 +126,7 @@ export class HomePage {
     // if(this.platform.is('cordova'))
     // cordova.plugins.Focus.focus(document.getElementById('playerContainer') as HTMLElement);
 
+
     this.storage.get('playlist').then((val) => {
       if (val != null)
         this.hero.currentPlaylist = val
@@ -107,48 +134,59 @@ export class HomePage {
         this.hero.currentPlaylist = 'RciE68Q7PCA';
         this.storage.set('playlist', 'RciE68Q7PCA');
       }
-
-      this.setupPlayer();
-
+      if (!this.hero.isLocalMode)
+        this.setupPlayer();
     });
 
     this.watchoutNetwork();
 
-    if(this.platform.is('cordova'))
-    this.fileList();
+    if (this.platform.is('cordova'))
+      this.fileList();
   }
 
   fileList() {
-    this.file.listDir(this.file.externalDataDirectory, '').then((result) => {
-      console.log("this.storageDirectory containnig " + this.file.externalDataDirectory);
-      console.log("listing taking place here" + this.file.externalDataDirectory);
-      console.log("showing result content" + result);
+    try {
+      let basePath
+      if (this.file.externalRootDirectory.endsWith('/'))
+        basePath = this.file.externalRootDirectory.slice(0, -1)
+      let roothPath = basePath + "/Download/"
+      let fullPath = basePath + "/Download/cocomelon/"
+      this.file.listDir(roothPath, "cocomelon").then((result) => {
+        // console.log("this.storageDirectory containnig externalRootDirectory" + this.file.externalRootDirectory);
+        // console.log("listing taking place here" + this.file.externalRootDirectory);
+        // console.log("showing result content" + result);
+        // code to print the name of files and folder on console as well as on device screen		
 
-      // code to print the name of files and folder on console as well as on device screen		
-
-      for (let file of result) {
-        if (file.isDirectory == true) {
-          console.log("Code if its a folder");
-          let name = file.name;
-          console.log("File name" + name);
+        for (let file of result) {
+          if (file.isDirectory == true) {
+            // console.log("Code if its a folder");
+            let name = file.name;
+            console.log("Folder name " + name);
+          }
+          else if (file.isFile == true) {
+            // console.log("Code if its a file");
+            let name = file.name;
+            this.hero.listOfLocalFileNames.push(name);
+            let path = fullPath + name;
+            this.hero.listOfLocalFiles.push(window.Ionic.WebView.convertFileSrc(path))
+          }
         }
-        else if (file.isFile == true) {
-          console.log("Code if its a file");
-          let name = file.name;
-          console.log("File name " + name);
-          let path = this.file.externalDataDirectory + name;
-          console.log(path);
-          file.getMetadata(function (metadata) {
-            let size = metadata.size;
-            console.log("File size" + size);
-          })
-        }
-      }
+        console.log(this.hero.listOfLocalFiles)
+        setTimeout(() => {
+          if (this.hero.isLocalMode) {
+            this.localVideoPlayer = document.getElementById('localPlayer') as HTMLVideoElement;
+            this.getLocalSrc()
+          }
+        }, 1000);
+      }).catch(err => {
+        console.log('Get Dir Error: ', err)
+      });
+
+    } catch (error) {
+      console.log(error)
+    }
 
 
-      /*result will have an array of file objects with 
-      file details or if its a directory:  */
-    });
   }
   watchoutNetwork() {
     document.addEventListener("offline", () => {
@@ -202,11 +240,14 @@ export class HomePage {
   }
 
   changePlayerSrc() {
-    this.myplayer.destroy();
-    this.showPlayer = false;
-    setTimeout(function () {
-      this.setupPlayer();
-    }.bind(this), 1000);
+    if (!this.hero.isLocalMode) {
+      this.myplayer.destroy();
+      this.showPlayer = false;
+      setTimeout(function () {
+
+        this.setupPlayer();
+      }.bind(this), 1000);
+    }
   }
   openSetting() {
     this.settingModal = this.popCtrl.create(SettingPage, {}, {
@@ -216,4 +257,63 @@ export class HomePage {
     this.settingModal.present({
     });
   }
+
+
+
+
+
+
+
+
+  //////////////////////////////////////////Local Player
+
+  localVideoEnded() {
+    console.log('video has ended')
+    this.getLocalSrc();
+  }
+  getLocalSrc() {
+    if (this.currentPlayingLocalFileIndex == this.hero.listOfLocalFiles.length - 1) {
+      this.currentPlayingLocalFileIndex = 0;
+      this.currentLocalPlayerLink = this.hero.listOfLocalFiles[this.currentPlayingLocalFileIndex]
+    }
+    else {
+      this.currentPlayingLocalFileIndex++;
+      this.currentLocalPlayerLink = this.hero.listOfLocalFiles[this.currentPlayingLocalFileIndex]
+    }
+  }
+  shuffleLocalPlaylistByIndex(index)
+  {
+    this.shuffle(this.hero.listOfLocalFileNames, this.hero.listOfLocalFiles)
+    this.hero.listOfLocalFileNames = this.moveItem(this.hero.listOfLocalFileNames, index, 0);
+    this.hero.listOfLocalFiles = this.moveItem(this.hero.listOfLocalFiles, index, 0)
+
+    this.currentPlayingLocalFileIndex = 0;
+    this.getLocalSrc();
+  }
+  moveItem(arr, fromIndex, toIndex){
+    let itemRemoved = arr.splice(fromIndex, 1) // assign the removed item as an array
+    arr.splice(toIndex, 0, itemRemoved[0]) // insert itemRemoved into the target index
+    return arr
+  }
+  
+  shuffleLocalPlaylist() {
+    this.shuffle(this.hero.listOfLocalFileNames, this.hero.listOfLocalFiles)
+    this.currentPlayingLocalFileIndex = 0;
+    this.getLocalSrc();
+  }
+  shuffle(obj1, obj2) {
+    var index = obj1.length;
+    var rnd, tmp1, tmp2;
+    while (index) {
+      rnd = Math.floor(Math.random() * index);
+      index -= 1;
+      tmp1 = obj1[index];
+      tmp2 = obj2[index];
+      obj1[index] = obj1[rnd];
+      obj2[index] = obj2[rnd];
+      obj1[rnd] = tmp1;
+      obj2[rnd] = tmp2;
+    }
+  }
+
 }
