@@ -26,10 +26,12 @@ export class SettingPage {
   toogleChanged(e) {
     console.log(this.hero.isLocalMode)
     if (this.hero.isLocalMode) {
+      this.currentVolume=10
       this.triggerEvent('kill');
       this.triggerEvent('localModeSwitch');
     }
     else {
+      this.currentVolume=100
       this.triggerEvent('refresh');
     }
   }
@@ -43,7 +45,6 @@ export class SettingPage {
     this.playlist = this.hero.currentPlaylist;
     if (this.platform.is('cordova'))
       this.currentVolume = cordova.VolumeControl.getVolume();
-
   }
 
   closeSetting() {
@@ -76,7 +77,7 @@ export class SettingPage {
     if (event == 'volume')
       data = { volume: this.currentVolume }
     if (event == 'local_volume')
-      data = { volume: this.currentVolume }
+      data = { volume: this.currentVolume/10 }
     if (event.startsWith('local_startwith_')) {
       let parts = event.split('_')
       let index = parts[parts.length - 1]

@@ -7,10 +7,8 @@
 
 
    <div *ngIf="hero.isLocalMode" style="width: 100%; height: 100%;">
-      <video (ended)="localVideoEnded()" id="localPlayer" *ngIf="hero.listOfLocalFiles.length>0 && currentLocalPlayerLink!=''" width="100%" height="100%" autoplay>
-         <source [src]="currentLocalPlayerLink" type="video/mp4">
-         Your browser does not support the video tag.
-      </video>
+      <video style="object-fit: cover;" [src]="hero.currentLocalPlayerLink" (ended)="localVideoEnded()" id="localPlayer" *ngIf="hero.listOfLocalFiles.length>0 && hero.currentLocalPlayerLink!=''" width="100%" height="100%" autoplay>
+            </video>
    </div>
 
    <div (click)="settingClick()" style="background: transparent; width:100px; height:100px;

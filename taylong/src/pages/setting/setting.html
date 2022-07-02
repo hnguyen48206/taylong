@@ -7,8 +7,8 @@
   </div>
   <ion-card style="padding: 10px; border-radius: 15px; width: 100%;">
     <ion-card-content>
-      <ion-item>
-        <ion-label>Chế độ OFFLINE</ion-label>
+      <ion-item *ngIf="hero.listOfLocalFiles.length>0">
+        <ion-label style="font-weight: bold;">Chế độ OFFLINE</ion-label>
         <ion-toggle (ionChange)="toogleChanged($event)" [(ngModel)]="hero.isLocalMode"></ion-toggle>
       </ion-item>
     </ion-card-content>
@@ -68,11 +68,17 @@
       </div>
       <div class="setting-card-content">
         <accordion [showArrows]="true" [closeOthers]="false" [expandAll]="false">
-          <accordion-group heading="Danh sách videos trong bộ nhớ thiết bị">
-            <ion-list>
+          <accordion-group>
+            
+             <accordion-heading style="font-size: 1.2em;
+             font-weight: bold;
+             color: crimson;">
+              <accordion-toggle>Danh Sách Videos Trong Thiết Bị    <ion-icon style="margin-left:10px" name="arrow-down"></ion-icon> </accordion-toggle>
+          </accordion-heading>
+            <ion-list style="border: solid lightsalmon;">
               <button ion-item *ngFor="let video of hero.listOfLocalFileNames; index as i"
                 (click)="localVideoSelected(i)">
-                {{video}}
+                <span style="color:#488aff" *ngIf="hero.currentPlayingLocalFileIndex == i">◉</span> {{video}}
               </button>
             </ion-list>
           </accordion-group>
@@ -84,8 +90,9 @@
               <ion-col>
                 <div style="display:flex; flex-direction: row; vertical-align: middle;">
                   <ion-icon style="padding-right: 5px;" small range-left name="volume-off"></ion-icon>
-                  <input type="range" id="vol" step=10 name="vol" min="0" max="100" [(ngModel)]="currentVolume"
+                  <input  type="range" id="vol" step=1 name="vol" min="0" max="10" [(ngModel)]="currentVolume"
                     (ngModelChange)="triggerEvent('local_volume')">
+                  
                   <ion-icon style="padding-left: 5px;" range-right name="volume-up"></ion-icon>
                 </div>
               </ion-col>
