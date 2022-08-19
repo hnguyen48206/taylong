@@ -10,8 +10,6 @@ import { FilePath } from '@ionic-native/file-path';
 import { File } from '@ionic-native/file';
 
 declare var YT: any
-
-declare var cordova: any;
 declare var window: any;
 @Component({
   selector: 'page-home',
